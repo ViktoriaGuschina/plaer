@@ -1,18 +1,22 @@
 package ru.netology.javaqa;
 
-import java.util.HashMap;
-import java.util.Map;
+import java.util.ArrayList;
+import java.util.List;
 
 public class Game {
-    public Map<String, Player> players = new HashMap<>();
+    public List<Player> players = new ArrayList<>();
+
 
     public void register(Player player) {
-        players.put(player.getName(), player);
+        if (findByName(player.getName()) != null) {
+            return;
+        }
+        players.add(player);
     }
 
     public int round(String playerName1, String playerName2) {
-        Player player1 = players.get(playerName1);
-        Player player2 = players.get(playerName2);
+        Player player1 = findByName(playerName1);
+        Player player2 = findByName(playerName2);
 
         if (player1 == null && player2 == null) {
             throw new NotRegisteredException("Players with name " + playerName1 + " and " + playerName2 + " are not registred");
@@ -35,6 +39,11 @@ public class Game {
     }
 
     public Player findByName(String name) {
-        return players.get(name);
+        for (Player p : players) {
+            if (p.getName().equals(name)) {
+                return p;
+            }
+        }
+        return null;
     }
 }
